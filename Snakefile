@@ -91,7 +91,7 @@ rule make_from_scratch:
         res_folder + "/{dataset}/from_scratch/{n_init}_{n_query}_{seed}/{method}/result.npz"
     shell:
         """
-        python active_learning.py --dataset {wildcards.dataset} --n_round {params.n_rounds} --strategy_name {wildcards.method} --n_init_labeled 100 --n_query {wildcards.n_query} --res_file {output} --seed {wildcards.seed}
+        python main_from_scratch.py --dataset {wildcards.dataset} --n_round {params.n_rounds} --strategy_name {wildcards.method} --n_init_labeled 100 --n_query {wildcards.n_query} --res_file {output} --seed {wildcards.seed}
         """
 
 
@@ -110,7 +110,7 @@ rule make_fine_tuning:
         res_folder + "/{dataset}/finetune/{base_model_trained_on}/{active_learning_ds}/{n_query}_{seed}/{method}/result.npz"
     shell:
         """
-        python finetune_joint_learn.py --dataset {wildcards.dataset} --n_round {params.n_rounds} --base_model_name {input.base_model} --base_model_trained_on {wildcards.base_model_trained_on} --active_learning_on {wildcards.active_learning_ds} \
+        python main_finetune_joint_learn.py --dataset {wildcards.dataset} --n_round {params.n_rounds} --base_model_name {input.base_model} --base_model_trained_on {wildcards.base_model_trained_on} --active_learning_on {wildcards.active_learning_ds} \
             --strategy_name {wildcards.method} --n_query {wildcards.n_query} --res_file {output} --seed {wildcards.seed} --mode finetune --n_init_labeled 8 
         """
 
@@ -128,7 +128,7 @@ rule make_joint_learning:
         res_folder + "/{dataset}/jointlearn/{base_model_trained_on}/{active_learning_ds}/{n_query}_{seed}/{method}/result.npz"
     shell:
         """
-        python finetune_joint_learn.py --dataset {wildcards.dataset} --n_round {params.n_rounds} --base_model_name {input.base_model} --base_model_trained_on {wildcards.base_model_trained_on} --active_learning_on {wildcards.active_learning_ds} \
+        python main_finetune_joint_learn.py --dataset {wildcards.dataset} --n_round {params.n_rounds} --base_model_name {input.base_model} --base_model_trained_on {wildcards.base_model_trained_on} --active_learning_on {wildcards.active_learning_ds} \
             --strategy_name {wildcards.method} --n_query {wildcards.n_query} --res_file {output} --seed {wildcards.seed} --mode jointlearning --n_init_labeled 8
         """
 
@@ -150,7 +150,7 @@ rule make_from_scratch_perfect:
         res_folder + "/{dataset}/from_scratch/{n_init}_{n_query}_{seed}/{method}/results_perfect_3.npz"
     shell:
         """
-        python best_model_from_scratch.py --dataset {wildcards.dataset} --strategy_name {wildcards.method} --res_file {output} --seed {wildcards.seed}
+        python main_best_model_from_scratch.py --dataset {wildcards.dataset} --strategy_name {wildcards.method} --res_file {output} --seed {wildcards.seed}
         """
 
 
@@ -168,7 +168,7 @@ rule make_fine_tuning_perfect:
         res_folder + "/{dataset}/finetune/{base_model_trained_on}/{active_learning_ds}/{n_query}_{seed}/{method}/results_perfect_2.npz"
     shell:
         """
-        python best_model_finetune_joint_learn.py --dataset {wildcards.dataset} --base_model_name {input.base_model} --base_model_trained_on {wildcards.base_model_trained_on} --active_learning_on {wildcards.active_learning_ds} \
+        python main_best_model_finetune_joint_learn.py --dataset {wildcards.dataset} --base_model_name {input.base_model} --base_model_trained_on {wildcards.base_model_trained_on} --active_learning_on {wildcards.active_learning_ds} \
            --res_file {output} --seed {wildcards.seed} --mode finetune 
         """
 
@@ -187,7 +187,7 @@ rule make_joint_learning_perfect:
         res_folder + "/{dataset}/jointlearn/{base_model_trained_on}/{active_learning_ds}/{n_query}_{seed}/{method}/results_perfect_2.npz"
     shell:
         """
-        python best_model_finetune_joint_learn.py --dataset {wildcards.dataset}  --base_model_name {input.base_model} --base_model_trained_on {wildcards.base_model_trained_on} --active_learning_on {wildcards.active_learning_ds} \
+        python main_best_model_finetune_joint_learn.py --dataset {wildcards.dataset}  --base_model_name {input.base_model} --base_model_trained_on {wildcards.base_model_trained_on} --active_learning_on {wildcards.active_learning_ds} \
            --res_file {output} --seed {wildcards.seed} --mode jointlearning 
         """
 ####################################################################################################################################################################################
@@ -203,5 +203,5 @@ rule prepare_base_model:
         base_model=res_folder + "/{dataset}/base_models/{base_model_trained_on}_model.pth"
     shell:
         """
-        python train_base_model.py --dataset {wildcards.dataset} --res_file {output.base_model} --group {wildcards.base_model_trained_on}
+        python main_train_base_model.py --dataset {wildcards.dataset} --res_file {output.base_model} --group {wildcards.base_model_trained_on}
         """
