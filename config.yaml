@@ -1,0 +1,19 @@
+cluster:
+  mkdir -p slurm_logs/{rule} &&
+  sbatch
+    --partition={resources.partition}
+    --cpus-per-task={resources.cpus}
+    --mem={resources.mem_mb}
+    --job-name={rule}-{wildcards}
+    --output=slurm_logs/{rule}/%j.out
+    --time={resources.time_min}
+    --gres={resources.gres}
+    --constraint={resources.constraint}
+default-resources:
+  - partition=esy
+  - mem_mb=25000
+  - constraint="volta"
+  - gres="gpu:1" #"shard:volta:50"
+  - nodes=1
+latency-wait: 60
+jobs: 8

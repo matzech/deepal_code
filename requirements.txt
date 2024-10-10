@@ -1,0 +1,6 @@
+jupyterlab==3.6.1
+matplotlib==3.6.3
+numpy
+Pillow==9.3.0
+snakemake==7.21.0
+torchvision==0.14.1

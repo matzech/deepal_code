@@ -1,0 +1,5 @@
+config_cred.json
+paper_plots_old
+.ipynb_checkpoints
+__pycache__
+src/__pycache__
